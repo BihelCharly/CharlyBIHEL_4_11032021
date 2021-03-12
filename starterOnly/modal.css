@@ -249,6 +249,26 @@ input[data-error]::after {
     color: red;
 } */
 
+
+/* AJOUTS */
+
+input::placeholder {
+    font-size: 0.8em;
+    color: #e54858;
+}
+
+.error {
+    font-size: 0.4em;
+    color: #e54858;
+}
+
+.error-border {
+    border: #e54858 2px solid;
+}
+
+
+/* FIN AJOUTS */
+
 .checkbox-label,
 .checkbox2-label {
     position: relative;

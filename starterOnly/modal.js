@@ -7,40 +7,19 @@ function editNav() {
     }
 }
 
-// RegEx email
-const regEx = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
-
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const inputs = document.getElementsByClassName("text-control");
+
+// DOM Elements added
 const cloBtn = document.querySelector(".close");
-const subBtn = document.querySelectorAll("btn-submit");
+const subBtn = document.getElementById('submitForm');
 const errorDisp = document.getElementsByClassName('error');
-
-
-
-// TESTS
-subBtn.forEach((btn) => btn.addEventListener("click", validation));
-// subBtn.forEach((btn) => btn.addEventListener("click", validate));
-
-function validation(event) {
-    const firstName = document.getElementById('first').value;
-    if (firstName.length < 2) {
-        event.preventDefault();
-        errorDisp[0].innerHTML = 'erreur';
-        errorDisp[0].style = 'color:red; font-size:14px';
-    } else {
-        errorDisp[0].innerHTML = '';
-    }
-}
-
-
-
-
-
-
+const errorDisp2 = document.getElementsByClassName('formData[data - error]::after');
+// RegEx email added
+const regEx = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -57,35 +36,45 @@ function closeModal() {
     modalbg.style.display = "none";
 }
 
+// submit data
+subBtn.addEventListener("click", validate);
 
-
-
-// function triggered by submit click
-function validate() {
-    // function to check datas on submit
-    getData();
-
-}
-
-function getData() {
-    // create 1 array
+function validate(event) {
     let array = [];
     // pushing datas from inputs into the array
     for (let i = 0; i < inputs.length; i++) {
         let value = inputs[i].value;
         array.push(value);
     }
-    // checking each index
-    if (array[0, 1, 2, 3, 4] == "" || array[0, 1, 2, 3, 4] == undefined || array[0, 1, 2, 3, 4] == null) {
-        console.log('Champs vides');
-    } else if (array[0].length < 2 || array[1].length < 2) {
-        console.log('Il y a moins de deux charactères');
-        errorDisp[0].innerHTML = 'erreur';
-        errorDisp[0].style = 'color:red; font-size:14px';
-    } else if (!array[2].match(regEx)) {
-        console.log("Ce n'est pas un email");
-    } else {
-        console.log('Prénom : ' + array[0]);
+    array.forEach(function() {
+        if (array[0, 1, 2, 3] == null || array[0, 1, 2, 3] == undefined || array[0, 1, 2, 3] == '') {
+            inputs[0].placeholder = 'Veuillez remplir ce champs';
+            inputs[1].placeholder = 'Veuillez remplir ce champs';
+            inputs[2].placeholder = 'Veuillez remplir ce champs';
+            inputs[3].style = ('color:#e54858');
+            event.preventDefault();
+        } else if (array[0] == null || array[0].length < 2) {
+            errorDisp[0].textContent = 'Minimum deux charactères';
+            inputs[0].classList.add("error-border");
+            event.preventDefault();
+        } else if (array[1].length < 2) {
+            errorDisp[1].textContent = 'Minimum deux charactères';
+            inputs[1].classList.add("error-border");
+            event.preventDefault();
+        } else if (!array[2].match(regEx)) {
+            errorDisp[2].textContent = 'Veuillez rentrer un email valide';
+            inputs[2].classList.add("error-border");
+            event.preventDefault();
+        }
+    });
 
-    }
-}
+
+
+};
+// remove CSS properties after adding something in indexed field
+// Comment faire ça pour tout les éléments sans avoir à choisir chaque index ?
+inputs[0].addEventListener("input", () => {
+    inputs[0].placeholder = '';
+    inputs[0].classList.remove("error-border");
+    errorDisp[0].textContent = '';
+});
