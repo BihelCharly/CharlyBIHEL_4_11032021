@@ -11,15 +11,17 @@ function editNav() {
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const inputs = document.getElementsByClassName("text-control");
+let inputs = document.getElementsByClassName("text-control");
 const inputs2 = document.querySelectorAll("text-control");
 
 // DOM Elements added
 const cloBtn = document.querySelector(".close");
 const subBtn = document.getElementById('submitForm');
 const errorDisp = document.getElementsByClassName('error');
-// RegEx email added
-const regEx = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+// RegEx added
+const regExEmail = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+const regExDate = new RegExp(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/);
+const regExNb = new RegExp(/^[0-9]+$/);
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -36,49 +38,62 @@ function closeModal() {
     modalbg.style.display = "none";
 }
 
+
 // submit data
 subBtn.addEventListener("click", validate);
-
+// function triggered on submit
 function validate(event) {
     // new array
     let array = [];
-    // loop trought inputs
+    // loop trought inputs and push them to the array
     for (let i = 0; i < inputs.length; i++) {
-        // check all required fields first
-        // if one mandatory input is empty
-        if (inputs[i].value == '' ||  inputs[i].value == null || inputs[i].value == undefined) {
+        // check all required fields
+        // if one mandatory input is empty -> cancel
+        if (inputs[i].value === '') {
             inputs[i].classList.add("error-border");
-            event.preventDefault();
-            // otherwise pushing datas from inputs into the array
-        } else {
-            // comment cibler uniquement les champs vides ? forEach ?
-            array.push(inputs[i].value);
+            console.log('ERROR : data missing');
+            // ne fonctionne pas ; pourquoi ?
+
         }
+        // otherwise if it's all good push them to the array
+        let value = inputs[i].value;
+        array.push(value);
     }
-    // check first name length >2
-    if (array[0] == null || array[0].length < 2) {
-        errorDisp[0].textContent = 'Minimum deux charactères';
+    // and do the verifications
+    // step 1 : check if first name length >= 2
+    if (array[0].length < 2) {
         inputs[0].classList.add("error-border");
+        errorDisp[0].textContent = 'Veuillez entrer 2 caractères ou plus pour le champ du nom.';
         event.preventDefault();
-        // check last name length >2
+        // step 2 : check if last name length >= 2
     } else if (array[1].length < 2) {
-        errorDisp[1].textContent = 'Minimum deux charactères';
         inputs[1].classList.add("error-border");
+        errorDisp[1].textContent = 'Veuillez entrer 2 caractères ou plus pour le champ du nom.';
         event.preventDefault();
-        // check if email match regex
-    } else if (!array[2].match(regEx)) {
-        errorDisp[2].textContent = 'Veuillez définir un email valide';
+        // step 3 : check if email match regex
+    } else if (!array[2].match(regExEmail)) {
         inputs[2].classList.add("error-border");
+        errorDisp[2].textContent = 'Veuillez définir un email valide';
+        event.preventDefault();
+        // step 4 : check if the value is a date
+        // regex ne fonctionne pas ; trouver une regex date qui fonctionne !
+    } else if (array[3] === '') {
+        inputs[3].classList.add("error-border");
+        errorDisp[3].textContent = 'Veuillez séléctioner une date de naissance';
+        event.preventDefault();
+        // step 5 : check if tournament value is a number
+    } else if (!array[4].match(regExNb)) {
+        inputs[4].classList.add("error-border");
+        errorDisp[4].innerHTML = 'Veuillez rentrer une valeur numérique';
         event.preventDefault();
     } else {
         // if all is good create new object - we call the function addPlayer
         let newPlayer = new addPlayer(array[0], array[1], array[2], array[3], array[4]);
+        //document.getElementById("reservForm").reset(newPlayer);
         console.log(newPlayer);
-    }
-};
-// remove CSS properties after adding something in indexed field
-// Comment faire ça pour tout les éléments sans avoir à choisir chaque index ?
 
+    }
+}
 
 // function to add a new object with players informations
 function addPlayer(firstName, lastName, email, birthdate, tournaments) {
@@ -89,11 +104,36 @@ function addPlayer(firstName, lastName, email, birthdate, tournaments) {
     this.tournaments = tournaments;
 }
 
+// clear inputs after click
+// comment faire ça en moins de lignes ?
+inputs[0].addEventListener("input", cleanFields0);
+inputs[1].addEventListener("input", cleanFields1);
+inputs[2].addEventListener("input", cleanFields2);
+inputs[3].addEventListener("input", cleanFields3);
+inputs[4].addEventListener("input", cleanFields4);
 
-// comment faire ça pour tout les champs selon celui qui est cliqué ?
-inputs[0].addEventListener("input", cleanFields);
 
-function cleanFields() {
+function cleanFields0() {
     inputs[0].classList.remove("error-border");
-    inputs[0].textContent = '';
+    errorDisp[0].textContent = null;
+}
+
+function cleanFields1() {
+    inputs[1].classList.remove("error-border");
+    errorDisp[1].textContent = null;
+}
+
+function cleanFields2() {
+    inputs[2].classList.remove("error-border");
+    errorDisp[2].textContent = null;
+}
+
+function cleanFields3() {
+    inputs[3].classList.remove("error-border");
+    errorDisp[3].textContent = null;
+}
+
+function cleanFields4() {
+    inputs[4].classList.remove("error-border");
+    errorDisp[4].textContent = null;
 }
