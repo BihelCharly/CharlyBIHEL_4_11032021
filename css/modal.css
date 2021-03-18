@@ -310,7 +310,7 @@ input::placeholder {
 }
 
 .checkbox-input {
-    display: none;
+    /*display: none;*/
 }
 
 .checkbox-input:checked+.checkbox-label .checkbox-icon::after,
