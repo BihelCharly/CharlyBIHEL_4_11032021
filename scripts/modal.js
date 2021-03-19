@@ -16,13 +16,12 @@ const btnConfirm = document.getElementById("confirmation__btn");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const chkBoxIcn = document.getElementsByClassName("checkbox-icon");
-//let inputs = document.getElementsByClassName("text-control");
 let inputs = document.querySelectorAll("input");
 let conditions = document.getElementById("checkbox1");
 let newsletters = document.getElementById("checkbox2");
 
 // DOM Elements added
-const cloBtn = document.querySelector(".close");
+const cloBtn = document.querySelectorAll(".close");
 const subBtn = document.getElementById('submitForm');
 const errorDisp = document.getElementsByClassName('error');
 // RegEx added
@@ -35,20 +34,24 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // launch modal form
 function launchModal() {
     modalbg.style.display = "block";
+    subForm.style.display = "block";
 }
 
 // close modal event
-cloBtn.addEventListener("click", closeModal);
+cloBtn.forEach((btn) => btn.addEventListener("click", closeModal));
 btnConfirm.addEventListener("click", closeModal);
 // close modal form
 function closeModal() {
     modalbg.style.display = "none";
+    subForm.style.display = "none";
+    modalConfirm.style.display = "none";
 }
 
 // launch confirmation event
 function modalConfirmation() {
-    modalConfirm.style.display = "block";
+    modalbg.style.display = "block";
     subForm.style.display = "none";
+    modalConfirm.style.display = "block";
 }
 
 // submit data
