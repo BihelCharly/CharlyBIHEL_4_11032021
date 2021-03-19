@@ -262,8 +262,16 @@ input::placeholder {
     color: #e54858;
 }
 
+input .error {
+    display: block;
+}
+
 .error-border {
     border: #e54858 2px solid;
+}
+
+#quantity {
+    width: 100%;
 }
 
 
@@ -310,7 +318,7 @@ input::placeholder {
 }
 
 .checkbox-input {
-    /*display: none;*/
+    display: none;
 }
 
 .checkbox-input:checked+.checkbox-label .checkbox-icon::after,

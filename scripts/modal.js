@@ -12,8 +12,8 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const chkBoxIcn = document.getElementsByClassName("checkbox-icon");
-let inputs = document.querySelectorAll(".formData input");
-let inputs2 = document.querySelectorAll("input");
+//let inputs = document.getElementsByClassName("text-control");
+let inputs = document.querySelectorAll("input");
 let conditions = document.getElementById("checkbox1");
 
 // DOM Elements added
@@ -36,7 +36,6 @@ function launchModal() {
 cloBtn.addEventListener("click", closeModal);
 // close modal form
 function closeModal() {
-    //document.getElementById("reservForm").reset();
     modalbg.style.display = "none";
 }
 
@@ -48,51 +47,53 @@ function validate(event) {
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].value == '') {
             inputs[i].classList.add("error-border");
-            console.log('ERROR : some datas are missing');
+            inputs[i].nextElementSibling.textContent = 'Veuillez remplir ce champs';
+            console.log('ERROR : DATAS ARE MISSING');
         } else {
-            // check the type for each inputs
+            // check className for each inputs
             switch (inputs[i].className) {
-                case 'value-first':
+                case 'value-first text-control':
                     if (inputs[0].value.length < 2) {
                         inputs[0].classList.add("error-border");
-                        errorDisp[0].textContent = 'Veuillez entrer 2 caractères ou plus pour le champ du prénom';
+                        errorDisp[0].textContent = 'Veuillez entrer 2 caractères';
                     }
-                case 'value-last':
+                case 'value-last text-control':
                     if (inputs[1].value.length < 2) {
                         inputs[1].classList.add("error-border");
-                        errorDisp[1].textContent = 'Veuillez entrer 2 caractères ou plus pour le champ du nom';
+                        errorDisp[1].textContent = 'Veuillez entrer 2 caractères';
                     }
-                case 'value-email':
+                case 'value-email text-control':
                     if (!inputs[2].value.match(regExEmail)) {
                         inputs[2].classList.add("error-border");
                         errorDisp[2].textContent = 'Veuillez définir un email valide';
                     }
-                case 'value-birthdate':
+                case 'value-birth text-control':
                     if (!inputs[3].value.match(regExDate)) {
                         inputs[3].classList.add("error-border");
                         errorDisp[3].textContent = 'Veuillez séléctionner une date valide';
                     }
-                case 'value-quantity':
+                case 'value-quantity text-control':
                     if (!inputs[4].value.match(regExNb)) {
                         inputs[4].classList.add("error-border");
-                        errorDisp[4].textContent = 'Veuillez rentrer un nombre';
+                        inputs[4].nextElementSibling.textContent = 'Veuillez rentrer un nombre';
                     }
+            }
+            //if all is good create new object - we call the function addPlayer & clean fields & return thx modal
+            if (conditions.checked == true && inputs[0].value.length >= 2 && inputs[1].value.length >= 2 && inputs[2].value.match(regExEmail) && inputs[3].value.match(regExDate) && inputs[4].value.match(regExNb)) {
+                let newPlayer = new addPlayer(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value);
+                console.log(newPlayer);
+                // call function to close modal
+                closeModal();
+                //clean fields
+                document.getElementById("reservForm").reset(newPlayer);
+            } else if (conditions.checked == false) {
+                errorDisp[5].innerHTML = "Obligatoire";
+                chkBoxIcn[6].style = "border:1px solid #e54858";
+            } else {
+                console.log("UNKNOWN ERROR");
             }
             break;
         }
-    }
-    //if all is good create new object - we call the function addPlayer & clean fields & return thx modal
-    if (conditions.checked == true) {
-        let newPlayer = new addPlayer(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value);
-        console.log(newPlayer);
-        // close inputs modal
-        //closeModal();
-        //clean fields
-        //document.getElementById("reservForm").reset(newPlayer);
-    } else {
-        console.log("FATAL ERROR");
-        errorDisp[5].innerHTML = "Obligatoire";
-        chkBoxIcn[6].style = "border:1px solid #e54858";
     }
 }
 
@@ -106,7 +107,6 @@ function addPlayer(firstName, lastName, email, birthdate, tournaments) {
     this.Tournois = tournaments;
     if (this.Tournois > 0 && this.Tournois < 99) {
         formData[5].required = true;
-        //formData[5].style = "color:red";
         if (!document.querySelector('.value-city:checked') == undefined) {
             let city = document.querySelector('.value-city:checked').value;
             this.Ville = city.value;
@@ -115,12 +115,11 @@ function addPlayer(firstName, lastName, email, birthdate, tournaments) {
         }
     } else {
         formData[5].required = false;
-        //formData[5].style = "color:inherit";
     }
 }
 
 // to remove stuff on input
-inputs2.forEach(function(element) {
+inputs.forEach(function(element) {
     element.addEventListener("input", function(event) {
         event.target.classList.remove("error-border");
         // if following element class isn't error then delete content from span error
@@ -130,9 +129,9 @@ inputs2.forEach(function(element) {
     });
 });
 
-// to check change on checkbox conditions
-conditions.addEventListener("change", ifConditionsChecked);
 
+
+// to check change on checkbox conditions
 function ifConditionsChecked(element) {
     if (element.target.checked) {
         // enable submit button if mandatory conditions are checked
@@ -149,3 +148,6 @@ function ifConditionsChecked(element) {
     }
     false;
 };
+
+// running on conditions checkbox
+conditions.addEventListener("change", ifConditionsChecked);
