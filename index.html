@@ -53,7 +53,15 @@
         </div>
 
         <div class="bground">
-            <div class="content">
+            <div id="confirmation" class="content">
+                <div class="modal-body modal-confirmation">
+                    <span class="close"></span>
+                    <div class="confirmation__text">Merci d'avoir renseigné vos informations
+                    </div>
+                    <button id="confirmation__btn" class="btn-submit" class="button">Fermer</button>
+                </div>
+            </div>
+            <div id="submit-form" class="content">
                 <span class="close"></span>
                 <div class="modal-body">
                     <form id="reservForm" name="reserve" action="index.html" method="get" onsubmit="validate();">
@@ -176,7 +184,7 @@
     </main>
     <footer>
         <p class="copyrights">
-            Copyright 2014 - 2020, GameOn Inc.
+            Copyright 2014 - 2021, GameOn Inc.
         </p>
     </footer>
     <script type="text/javascript" src="scripts/modal.js"></script>

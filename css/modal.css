@@ -274,6 +274,40 @@ input .error {
     width: 100%;
 }
 
+#confirmation {
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    height: 721px;
+    width: 500px;
+}
+
+.modal-confirmation {
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.confirmation__text {
+    font-size: 2.5rem;
+    text-align: center;
+    align-self: center;
+    width: 70%;
+}
+
+#confirmation__btn {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 25px;
+    text-align: center;
+}
+
 
 /* FIN AJOUTS */
 
