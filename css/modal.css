@@ -33,6 +33,11 @@ img {
     padding-right: 1rem;
 }
 
+.logo {
+    width: auto;
+    height: auto;
+}
+
 .topnav {
     overflow: hidden;
     margin: 3.5%;

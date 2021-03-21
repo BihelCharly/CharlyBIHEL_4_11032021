@@ -1,3 +1,20 @@
+// DOM Elements
+const icon = document.querySelector(".icon");
+const modal = document.querySelector(".modal-body");
+const modalbg = document.querySelector(".bground");
+const subForm = document.getElementById("submit-form");
+const modalConfirm = document.getElementById("confirmation");
+const btnConfirm = document.getElementById("confirmation__btn");
+const modalBtn = document.querySelectorAll(".modal-btn");
+const form = document.getElementById("reservForm");
+const formData = document.querySelectorAll(".formData");
+const chkBoxIcn = document.getElementsByClassName("checkbox-icon");
+let inputs = document.querySelectorAll("input");
+let conditions = document.getElementById("checkbox1");
+let newsletters = document.getElementById("checkbox2");
+
+icon.addEventListener("click", editNav);
+
 function editNav() {
     let x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
@@ -7,25 +24,12 @@ function editNav() {
     }
 }
 
-// DOM Elements
-const modal = document.querySelector(".modal-body");
-const modalbg = document.querySelector(".bground");
-const subForm = document.getElementById("submit-form");
-const modalConfirm = document.getElementById("confirmation");
-const btnConfirm = document.getElementById("confirmation__btn");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const formData = document.querySelectorAll(".formData");
-const chkBoxIcn = document.getElementsByClassName("checkbox-icon");
-let inputs = document.querySelectorAll("input");
-let conditions = document.getElementById("checkbox1");
-let newsletters = document.getElementById("checkbox2");
-
 // DOM Elements added
 const cloBtn = document.querySelectorAll(".close");
 const subBtn = document.getElementById('submitForm');
 const errorDisp = document.getElementsByClassName('error');
 // RegEx added
-const regExEmail = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+const regExEmail = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 const regExDate = new RegExp(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/)
 const regExNb = new RegExp(/^[0-9]+$/);
 
@@ -63,51 +67,50 @@ function validate(event) {
         if (inputs[i].value == '') {
             inputs[i].classList.add("error-border");
             inputs[i].nextElementSibling.textContent = 'Veuillez remplir ce champs';
-            console.log('ERROR : DATAS ARE MISSING');
         } else {
             // check className for each inputs
-            switch (inputs[i].className) {
-                case 'value-first text-control':
+            switch (inputs[i].id) {
+                case 'first':
                     if (inputs[0].value.length < 2) {
                         inputs[0].classList.add("error-border");
                         errorDisp[0].textContent = 'Minimum 2 caractères';
                     }
-                case 'value-last text-control':
+                case 'last':
                     if (inputs[1].value.length < 2) {
                         inputs[1].classList.add("error-border");
                         errorDisp[1].textContent = 'Minimum 2 caractères';
                     }
-                case 'value-email text-control':
+                case 'email':
                     if (!inputs[2].value.match(regExEmail)) {
                         inputs[2].classList.add("error-border");
                         errorDisp[2].textContent = 'Veuillez saisir un email valide';
                     }
-                case 'value-birth text-control':
+                case 'date':
                     if (!inputs[3].value.match(regExDate)) {
                         inputs[3].classList.add("error-border");
                         errorDisp[3].textContent = 'Veuillez saisir une date valide';
                     }
-                case 'value-quantity text-control':
+                case 'quantity':
                     if (!inputs[4].value.match(regExNb)) {
                         inputs[4].classList.add("error-border");
                         inputs[4].nextElementSibling.textContent = 'Veuillez saisir un nombre';
                     }
+                    break;
             }
-            //if all is good create new object - we call the function addPlayer & clean fields & return thx modal
-            if (conditions.checked == true && inputs[0].value.length >= 2 && inputs[1].value.length >= 2 && inputs[2].value.match(regExEmail) && inputs[3].value.match(regExDate) && inputs[4].value.match(regExNb)) {
-                let newPlayer = new addPlayer(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value);
-                console.log(newPlayer);
-                // call function to close modal & show thank you
-                modalConfirmation();
-                //clean fields
-                document.getElementById("reservForm").reset(newPlayer);
-                // to check if checkbox is checked
-            } else if (conditions.checked == false) {
-                errorDisp[5].innerHTML = "Obligatoire";
-                chkBoxIcn[6].style = "border:1px solid #e54858";
-            }
-            break;
         }
+    }
+    //if all is good create new object - we call the function addPlayer & clean fields & return thx modal
+    if (conditions.checked == true && inputs[0].value.length >= 2 && inputs[1].value.length >= 2 && inputs[2].value.match(regExEmail) && inputs[3].value.match(regExDate) && inputs[4].value.match(regExNb)) {
+        let newPlayer = new addPlayer(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value);
+        console.log(newPlayer);
+        // call function to close modal & show thank you
+        modalConfirmation();
+        //clean fields
+        document.getElementById("reservForm").reset(newPlayer);
+        // to check if checkbox is checked
+    } else if (conditions.checked == false) {
+        errorDisp[5].innerHTML = "Obligatoire";
+        chkBoxIcn[6].style = "border:1px solid #e54858";
     }
 }
 
@@ -125,6 +128,7 @@ function addPlayer(firstName, lastName, email, birthdate, tournaments) {
             this.Ville = city.value;
         } else {
             this.Ville = "Inconnue";
+            return false;
         }
     } else {
         formData[5].required = false;
@@ -147,6 +151,9 @@ inputs.forEach(function(element) {
     });
 });
 
+// running on conditions checkbox
+conditions.addEventListener("change", ifConditionsChecked);
+
 // to check change on checkbox conditions
 function ifConditionsChecked(element) {
     if (element.target.checked) {
@@ -164,6 +171,3 @@ function ifConditionsChecked(element) {
     }
     false;
 };
-
-// running on conditions checkbox
-conditions.addEventListener("change", ifConditionsChecked);
