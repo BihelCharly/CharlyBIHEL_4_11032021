@@ -9,9 +9,13 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 const form = document.getElementById("reservForm");
 const formData = document.querySelectorAll(".formData");
 const chkBoxIcn = document.getElementsByClassName("checkbox-icon");
+const cloBtn = document.querySelectorAll(".close");
+const subBtn = document.getElementById('submitForm');
+const errorDisp = document.getElementsByClassName('error');
 let inputs = document.querySelectorAll("input");
 let conditions = document.getElementById("checkbox1");
 let newsletters = document.getElementById("checkbox2");
+
 
 icon.addEventListener("click", editNav);
 
@@ -24,10 +28,6 @@ function editNav() {
     }
 }
 
-// DOM Elements added
-const cloBtn = document.querySelectorAll(".close");
-const subBtn = document.getElementById('submitForm');
-const errorDisp = document.getElementsByClassName('error');
 // RegEx added
 const regExEmail = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 const regExDate = new RegExp(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/)
@@ -62,6 +62,7 @@ function modalConfirmation() {
 subBtn.addEventListener("click", validate);
 // function triggered on submit
 function validate(event) {
+    let cityError = false;
     event.preventDefault();
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].value == '') {
@@ -95,17 +96,28 @@ function validate(event) {
                         inputs[4].classList.add("error-border");
                         inputs[4].nextElementSibling.textContent = 'Veuillez saisir un nombre';
                     }
-                    break;
+                case 'location1':
+                    if (inputs[4].value >= 1) {
+                        if (document.querySelector('.value-city:checked') == undefined) {
+                            cityError = true;
+                            errorDisp[5].textContent = 'Veuillez choisir une ville';
+                        }
+                    }
             }
+            break;
         }
     }
     //if all is good create new object - we call the function addPlayer & clean fields & return thx modal
-    if (conditions.checked == true && inputs[0].value.length >= 2 && inputs[1].value.length >= 2 && inputs[2].value.match(regExEmail) && inputs[3].value.match(regExDate) && inputs[4].value.match(regExNb)) {
-        let newPlayer = new addPlayer(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value);
+    if (conditions.checked == true && inputs[0].value.length >= 2 && inputs[1].value.length >= 2 && inputs[2].value.match(regExEmail) && inputs[3].value.match(regExDate) && inputs[4].value.match(regExNb) && cityError == false) {
+        // get value from location input
+        let city = document.querySelector('.value-city:checked').value;
+        // to create new object
+        let newPlayer = new addPlayer(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, inputs[4].value, city);
+        // show the object in the console
         console.log(newPlayer);
         // call function to close modal & show thank you
         modalConfirmation();
-        //clean fields
+        //clean fields to send a new form
         document.getElementById("reservForm").reset(newPlayer);
         // to check if checkbox is checked
     } else if (conditions.checked == false) {
@@ -115,24 +127,17 @@ function validate(event) {
 }
 
 // function to add a new object with players informations
-function addPlayer(firstName, lastName, email, birthdate, tournaments) {
+function addPlayer(firstName, lastName, email, birthdate, tournaments, city) {
     this.Prenom = firstName.charAt(0).toUpperCase() + firstName.slice(1);
     this.Nom = lastName.toUpperCase();
     this.email = email.toLowerCase();
     this.Naissance = birthdate;
     this.Tournois = tournaments;
-    if (this.Tournois > 0 && this.Tournois < 99) {
-        formData[5].required = true;
-        if (!document.querySelector('.value-city:checked') == undefined) {
-            let city = document.querySelector('.value-city:checked').value;
-            this.Ville = city.value;
-        } else {
-            this.Ville = "Inconnue";
-            return false;
-        }
-    } else {
-        formData[5].required = false;
+    // if tournaments value is >= 1 add city value otherwise don't
+    if (this.Tournois >= 1) {
+        this.Ville = city;
     }
+    // if newsletter is checked add the information to the object
     if (newsletters.checked) {
         this.Newsletter = "oui";
     } else {
