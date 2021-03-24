@@ -17,7 +17,6 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
-    background-image: url("background.png");
     font-family: var(--font-default);
     font-size: 18px;
     max-width: 1300px;
@@ -96,7 +95,7 @@ img {
     .topnav.responsive .icon {
         position: absolute;
         right: 0;
-        top: 0;
+        top: 5px;
     }
     .topnav.responsive a {
         float: none;
@@ -179,6 +178,7 @@ main {
     top: 0;
     height: 100%;
     width: 100%;
+    padding-top: 50px;
     overflow: auto;
     background-color: rgba(26, 39, 156, 0.4);
 }
@@ -245,14 +245,6 @@ input {
 .formData[data-error-visible="true"] .text-control {
     border: 2px solid #e54858;
 }
-
-
-/* 
-input[data-error]::after {
-    content: attr(data-error);
-    font-size: 0.4em;
-    color: red;
-} */
 
 
 /* AJOUTS */
@@ -603,6 +595,34 @@ footer {
 }
 
 @media screen and (max-width: 800px) {
+    #myTopnav {
+        display: grid;
+        grid-template-columns: 50% 50%;
+    }
+    .header-logo {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: center;
+    }
+    .logo {
+        width: 150px;
+        height: auto;
+        margin-left: 15px;
+    }
+    .topnav a.icon {
+        margin-top: 0px;
+    }
+    .main-navbar {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .main-navbar a {
+        font-size: 1rem;
+        text-align: center;
+    }
+    .main-navbar a>span {
+        font-size: 0.8rem;
+    }
     .hero-section {
         display: block;
         box-shadow: unset;
@@ -610,7 +630,10 @@ footer {
     .hero-content {
         background: #fff;
         color: #000;
-        padding: 20px;
+        padding: 0px 0px;
+        min-width: 100%;
+        width: 100%;
+        text-align: justify;
     }
     .hero-content::after {
         content: unset;
@@ -619,16 +642,26 @@ footer {
         display: none;
     }
     .hero-headline {
-        font-size: 4.5rem;
+        width: 100%;
+        min-width: 100%;
+        text-align: center;
+        font-size: 2.3rem;
         white-space: normal;
+        font-weight: bold;
+        padding-top: 10px;
+    }
+    .hero-headline br {
+        display: none;
     }
     .hero-text {
-        width: unset;
-        font-size: 1.5rem;
+        width: 100%;
+        font-size: 1rem;
+        margin-top: 30px;
+        padding-bottom: 20px;
     }
     .hero-img img {
         border-radius: 10px;
-        margin-top: 40px;
+        margin-top: 10px;
     }
     .hero-section>.btn-signup {
         display: block;
@@ -636,8 +669,16 @@ footer {
         padding: 12px 35px;
     }
     .copyrights {
-        margin-top: 50px;
+        margin-top: 0px;
         text-align: center;
+        font-size: 0.8rem;
+    }
+    #confirmation {
+        height: 600px;
+        width: 100%;
+    }
+    .confirmation__text {
+        font-size: 2rem;
     }
 }
 
